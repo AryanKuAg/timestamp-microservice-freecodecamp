@@ -29,7 +29,18 @@ app.get("/api/:date", function (req, res) {
       // console.log(parseInt(body));
       // console.log("nono");
       let unix = parseInt(body.replace('"', "").replace('"', ""));
-      res.json({ unix: unix });
+      // for utc
+      let date = req.params.date;
+      let year = date.slice(0, 4);
+      let month = date.slice(5, 7);
+      let day = date.slice(8, 10);
+      console.log(year);
+      console.log(month);
+      console.log(day);
+      const utcDate1 = new Date(Date.UTC(year, month, day));
+
+      console.log(utcDate1.toUTCString());
+      res.json({ unix: unix, utc: utcDate1 });
     }
   });
 });

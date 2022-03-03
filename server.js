@@ -22,27 +22,39 @@ app.get("/", function (req, res) {
 // your first API endpoint...
 app.get("/api/:date", function (req, res) {
   // res.json({ greeting: "hello API" });
-  let url = `https://showcase.api.linx.twenty57.net/UnixTime/tounix?date=${req.params.date}`;
-  request(url, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      // console.log(response.toJSON());
-      // console.log(parseInt(body));
-      // console.log("nono");
-      let unix = parseInt(body.replace('"', "").replace('"', ""));
-      // for utc
-      let date = req.params.date;
-      let year = date.slice(0, 4);
-      let month = date.slice(5, 7);
-      let day = date.slice(8, 10);
-      console.log(year);
-      console.log(month);
-      console.log(day);
-      const utcDate1 = new Date(Date.UTC(year, month, day));
+  let date = req.params.date;
+  let url = `https://showcase.api.linx.twenty57.net/UnixTime/tounix?date=${date}`;
+  if (date.includes("/") || date.includes("-")) {
+    request(url, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        let date = req.params.date;
+        // console.log(response.toJSON());
+        // console.log(parseInt(body));
+        // console.log("nono");
+        let unix = parseInt(body.replace('"', "").replace('"', ""));
+        // for utc
 
-      console.log(utcDate1.toUTCString());
-      res.json({ unix: unix, utc: utcDate1 });
-    }
-  });
+        let year = date.slice(0, 4);
+        let month = date.slice(5, 7);
+        let day = date.slice(8, 10);
+        // console.log(year);
+        // console.log(month);
+        // console.log(day);
+        const utcDate1 = new Date(Date.UTC(year, month, day));
+
+        res.json({ unix: unix, utc: utcDate1.toUTCString() });
+      }
+    });
+  } else {
+    console.log("else part");
+
+    let date = req.params.date;
+
+    let unix = parseInt(date);
+    const utcDate1 = new Date(date * 1000);
+    // console.log({ unix: unix, utc: utcDate1.toUTCString() });
+    res.json({ unix: unix, utc: utcDate1.toUTCString() });
+  }
 });
 
 const port = process.env.PORT || 1234;

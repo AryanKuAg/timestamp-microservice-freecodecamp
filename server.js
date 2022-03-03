@@ -23,8 +23,11 @@ app.get("/", function (req, res) {
 app.get("/api/:date", function (req, res) {
   // res.json({ greeting: "hello API" });
   let date = req.params.date;
+  console.log(date);
   let url = `https://showcase.api.linx.twenty57.net/UnixTime/tounix?date=${date}`;
-  if (date.includes("/") || date.includes("-")) {
+  if (date === "") {
+    console.log("no date");
+  } else if (date.includes("/") || date.includes("-")) {
     request(url, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         let date = req.params.date;
@@ -53,7 +56,11 @@ app.get("/api/:date", function (req, res) {
     let unix = parseInt(date);
     const utcDate1 = new Date(date * 1000);
     // console.log({ unix: unix, utc: utcDate1.toUTCString() });
-    res.json({ unix: unix, utc: utcDate1.toUTCString() });
+    if (unix) {
+      res.json({ unix: unix, utc: utcDate1.toUTCString() });
+    } else {
+      res.json({ error: "Invalid Date" });
+    }
   }
 });
 

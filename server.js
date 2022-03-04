@@ -62,8 +62,8 @@ app.get("/api/:date", function (req, res) {
         // console.log(month);
         // console.log(day);
         const utcDate1 = new Date(Date.UTC(year, month - 1, day));
-
-        if (unix) {
+        let successDateParse = new Date(date).toString();
+        if (successDateParse !== "Invalid Date") {
           res.json({ unix: unix, utc: utcDate1.toUTCString() });
         } else {
           res.json({ error: "Invalid Date" });
@@ -76,7 +76,8 @@ app.get("/api/:date", function (req, res) {
     let unix = parseInt(date);
     const utcDate1 = new Date(unix);
     // console.log({ unix: unix, utc: utcDate1.toUTCString() });
-    if (unix) {
+    let successDateParse = new Date(date).toString();
+    if (successDateParse !== "Invalid Date") {
       res.json({ unix: unix, utc: utcDate1.toUTCString() });
     } else {
       res.json({ error: "Invalid Date" });

@@ -34,7 +34,7 @@ app.get("/api/:date", function (req, res) {
         // console.log(response.toJSON());
         // console.log(parseInt(body));
         // console.log("nono");
-        let unix = parseInt(body.replace('"', "").replace('"', ""));
+        let unix = parseInt(body.replace('"', "").replace('"', "")) * 1000;
         // for utc
 
         let year = date.slice(0, 4);
@@ -49,11 +49,9 @@ app.get("/api/:date", function (req, res) {
       }
     });
   } else {
-    console.log("else part");
-
     let date = req.params.date;
 
-    let unix = parseInt(date);
+    let unix = parseInt(date) * 1000;
     const utcDate1 = new Date(date * 1000);
     // console.log({ unix: unix, utc: utcDate1.toUTCString() });
     if (unix) {

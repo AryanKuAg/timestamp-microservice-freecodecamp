@@ -1,2 +1,2 @@
-let date = new Date("6hg800000");
-console.log(date.toString());
+let date = new Date("2022-03-03");
+console.log(date.getTime().toString());

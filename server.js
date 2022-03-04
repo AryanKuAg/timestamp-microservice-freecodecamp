@@ -37,10 +37,23 @@ app.get("/api/timestamp", currentFunction);
 let endPointFunction = function (req, res) {
   // res.json({ greeting: "hello API" });
   let date = req.params.date;
+  console.log(date);
 
   // let url = `https://showcase.api.linx.twenty57.net/UnixTime/tounix?date=${date}`;
-  if (date.includes("/") || date.includes("-")) {
+  if (date.includes(" ")) {
+    console.log("space");
+    try {
+      let date = req.params.date;
+      let unix = new Date(date).getTime();
+      unix = Number(unix);
+      const utc = new Date(unix);
+      res.json({ unix: unix, utc: utc.toUTCString() });
+    } catch (_) {
+      res.json({ error: "Invalid Date" });
+    }
+  } else if (date.includes("-")) {
     let date = req.params.date;
+    console.log("if");
     // console.log(response.toJSON());
     // console.log(parseInt(body));
     // console.log("nono");
@@ -63,6 +76,7 @@ let endPointFunction = function (req, res) {
       res.json({ error: "Invalid Date" });
     }
   } else {
+    console.log("else");
     let date = req.params.date;
 
     let unix = parseInt(date);

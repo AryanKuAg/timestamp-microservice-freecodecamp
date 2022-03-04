@@ -19,15 +19,33 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + "/views/index.html");
 });
 
+app.get("/api", (req, res) => {
+  let date = new Date().toLocaleDateString();
+  let url = `https://showcase.api.linx.twenty57.net/UnixTime/tounix?date=${date}`;
+
+  request(url, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      let utc = new Date().toUTCString();
+
+      let unix = parseInt(body.replace('"', "").replace('"', "")) * 1000;
+      unix = Math.round(new Date().getTime()).toString();
+      // for utc
+
+      res.json({ unix: unix, utc: utc });
+    }
+  });
+
+  // console.log(today);
+  // res.json({ unix: unix, utc: utcDate1.toUTCString() });
+});
+
 // your first API endpoint...
 app.get("/api/:date", function (req, res) {
   // res.json({ greeting: "hello API" });
   let date = req.params.date;
   console.log(date);
   let url = `https://showcase.api.linx.twenty57.net/UnixTime/tounix?date=${date}`;
-  if (date === "") {
-    console.log("no date");
-  } else if (date.includes("/") || date.includes("-")) {
+  if (date.includes("/") || date.includes("-")) {
     request(url, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         let date = req.params.date;

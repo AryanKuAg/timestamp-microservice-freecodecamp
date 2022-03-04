@@ -28,7 +28,7 @@ app.get("/api", (req, res) => {
       let utc = new Date().toUTCString();
 
       let unix = parseInt(body.replace('"', "").replace('"', "")) * 1000;
-      unix = Math.round(new Date().getTime()).toString();
+      unix = Math.round(new Date().getTime());
       // for utc
 
       res.json({ unix: unix, utc: utc });
@@ -43,7 +43,7 @@ app.get("/api", (req, res) => {
 app.get("/api/:date", function (req, res) {
   // res.json({ greeting: "hello API" });
   let date = req.params.date;
-  console.log(date);
+
   let url = `https://showcase.api.linx.twenty57.net/UnixTime/tounix?date=${date}`;
   if (date.includes("/") || date.includes("-")) {
     request(url, function (error, response, body) {
@@ -63,7 +63,11 @@ app.get("/api/:date", function (req, res) {
         // console.log(day);
         const utcDate1 = new Date(Date.UTC(year, month - 1, day));
 
-        res.json({ unix: unix, utc: utcDate1.toUTCString() });
+        if (unix) {
+          res.json({ unix: unix, utc: utcDate1.toUTCString() });
+        } else {
+          res.json({ error: "Invalid Date" });
+        }
       }
     });
   } else {
@@ -72,7 +76,7 @@ app.get("/api/:date", function (req, res) {
     let unix = parseInt(date);
     const utcDate1 = new Date(unix);
     // console.log({ unix: unix, utc: utcDate1.toUTCString() });
-    if (typeof unix === typeof 3) {
+    if (unix) {
       res.json({ unix: unix, utc: utcDate1.toUTCString() });
     } else {
       res.json({ error: "Invalid Date" });

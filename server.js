@@ -52,7 +52,7 @@ app.get("/api/:date", function (req, res) {
     let date = req.params.date;
 
     let unix = parseInt(date) * 1000;
-    const utcDate1 = new Date(date * 1000);
+    const utcDate1 = new Date(date);
     // console.log({ unix: unix, utc: utcDate1.toUTCString() });
     if (unix) {
       res.json({ unix: unix, utc: utcDate1.toUTCString() });

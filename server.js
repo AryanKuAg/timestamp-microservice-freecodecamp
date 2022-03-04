@@ -20,28 +20,21 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + "/views/index.html");
 });
 
-app.get("/api", (req, res) => {
-  let date = new Date().toLocaleDateString();
-  let url = `https://showcase.api.linx.twenty57.net/UnixTime/tounix?date=${date}`;
-
-  request(url, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      let utc = new Date().toUTCString();
-
-      let unix = parseInt(body.replace('"', "").replace('"', "")) * 1000;
-      unix = Math.round(new Date().getTime());
-      // for utc
-
-      res.json({ unix: unix, utc: utc });
-    }
-  });
-
+let currentFunction = function (req, res) {
+  // let url = `https://showcase.api.linx.twenty57.net/UnixTime/tounix?date=${date}`;
+  let unix = new Date().getTime();
+  unix = parseInt(unix);
+  const utc = new Date(unix).toUTCString();
+  res.json({ unix: unix, utc: utc });
   // console.log(today);
   // res.json({ unix: unix, utc: utcDate1.toUTCString() });
-});
+};
+
+app.get("/api", currentFunction);
+app.get("/api/timestamp", currentFunction);
 
 // your first API endpoint...
-app.get("/api/:date", function (req, res) {
+let endPointFunction = function (req, res) {
   // res.json({ greeting: "hello API" });
   let date = req.params.date;
 
@@ -87,8 +80,9 @@ app.get("/api/:date", function (req, res) {
       res.json({ error: "Invalid Date" });
     }
   }
-});
-
+};
+app.get("/api/:date", endPointFunction);
+app.get("/api/timestamp/:date", endPointFunction);
 app.get("*", (req, res) => {
   res.send("Not Found");
 });

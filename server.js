@@ -75,9 +75,9 @@ app.get("/api/:date", function (req, res) {
 
     let unix = parseInt(date);
     const utcDate1 = new Date(unix);
-    // console.log({ unix: unix, utc: utcDate1.toUTCString() });
-    let successDateParse = new Date(date).toString();
-    if (successDateParse !== "Invalid Date") {
+    // console.log({ unix: unix, utc: utcDate1.toUTCString() });333333333333
+
+    if (unix && date.length === 13) {
       res.json({ unix: unix, utc: utcDate1.toUTCString() });
     } else {
       res.json({ error: "Invalid Date" });

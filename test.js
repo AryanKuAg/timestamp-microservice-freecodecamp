@@ -1,2 +1,2 @@
-let date = new Date("my name is aryan agrawal");
+let date = new Date("1451001600000");
 console.log(date.toString());
